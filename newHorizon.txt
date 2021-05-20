@@ -1,0 +1,68 @@
+
+first thing ---- windows form app
+second thing ------library file
+thhird ------ install entity framework
+4-----create db in sql server..
+initialize the db in .edmx file
+
+datbase name ---newhorizon		vamsi krishna		
+table1---userdata--id int  identity(1,1),emailid varchar(40) primarykey ,password varchar(40),name varchar(40)
+table2----quizz  id int identity(1,1),questions varchar(100),answers varchar(20)
+-------------------------------------------------
+
+
+from1 register page-----------------		atchaya
+
+name
+emailid
+password
+retype password
+register btn
+
+from2 -login page 				druthi
+
+emailID
+password 
+login btn
+
+
+
+from 3---quizz dashboard			
+
+global variable scorecard +=1
+
+textbox1q				btn check
+textbox1a enter ans		we have to pass this our Dal valditaion to check ans matches with database if( true--)
+														score +=1;
+
+
+textbox2q
+textbox2a				btnn check
+textbox3q
+textbox3a				btn check						
+
+btn----submit  object then make all this then pass object to DAl validation foreach to loop this object one by one then validate and increment done if else
+message box is ( completed)
+
+
+
+form 4 ---resultspage			maria/sravani		
+
+total quizz 10 in textbox--- txxtbox
+scorecard -=---- textbox
+close button ----- this.close();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
