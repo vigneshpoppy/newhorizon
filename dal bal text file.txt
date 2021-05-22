@@ -1,0 +1,291 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BAL;
+using System.Data.SqlClient;
+namespace DAL
+{
+    public class ProductsDAL
+    {
+
+        public bool InsertProducts(Products products)
+        {
+            bool status;
+            SqlConnection cn = new SqlConnection("server=DESKTOP-I1NL9J5\\sqlexpress;Integrated Security=true;database=northwind");
+            SqlCommand cmd = new SqlCommand("[dbo].[InsertProducts]", cn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@productname", products.ProductName);
+            cmd.Parameters.AddWithValue("@supplierId", products.SupplierID);
+            cmd.Parameters.AddWithValue("@categoryId ", products.CategoryID);
+            cmd.Parameters.AddWithValue("@Quantity", products.QtyPerUnit);
+            cmd.Parameters.AddWithValue("@Unitprice", products.UnitPrice);
+            cn.Open();
+            try
+            {
+                cmd.ExecuteNonQuery();
+                status = true;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            cn.Close();
+            return status;
+        }
+        public bool UpdateProducts(Products products,int productId)
+        {
+            bool status;
+            int id = productId;
+            SqlConnection cn = new SqlConnection("server=DESKTOP-I1NL9J5\\sqlexpress;Integrated Security=true;database=northwind");
+            SqlCommand cmd = new SqlCommand("[dbo].[UpdateProduct]", cn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@productid",id);
+            cmd.Parameters.AddWithValue("@productname", products.ProductName);
+            cmd.Parameters.AddWithValue("@supplierId", products.SupplierID);
+            cmd.Parameters.AddWithValue("@categoryId ", products.CategoryID);
+            cmd.Parameters.AddWithValue("@Quantity", products.QtyPerUnit);
+            cmd.Parameters.AddWithValue("@Unitprice", products.UnitPrice);
+            cn.Open();
+            try
+            {
+                cmd.ExecuteNonQuery();
+                status = true;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            cn.Close();
+            return status;
+        }
+        public bool DeleteProduct(int productid)
+        {
+            bool status;
+            int id = productid;
+            SqlConnection cn = new SqlConnection("server=DESKTOP-I1NL9J5\\sqlexpress;Integrated Security=true;database=northwind");
+            SqlCommand cmd = new SqlCommand("[dbo].[Deleteproduct]", cn);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@productid", id);
+            cn.Open();
+            try
+            {
+                cmd.ExecuteNonQuery();
+                status = true;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return status;
+        }
+        public Products FindProduct(int productid)
+
+        {
+            SqlConnection cn = new SqlConnection("server=DESKTOP-I1NL9J5\\sqlexpress;Integrated Security=true;database=northwind");
+
+            SqlCommand cmd = new SqlCommand("select * from [dbo].[FindProduct](@productid)", cn);
+            cmd.Parameters.AddWithValue("productid", productid);
+            cn.Open();
+
+            Products p = new Products();
+            try
+            {
+                SqlDataReader dr = cmd.ExecuteReader();
+                //readonly, fwdonly stream of data
+
+                if (dr.HasRows)
+                {
+                    dr.Read();
+                    p.ProductID = Convert.ToInt32(dr["productid"]);
+                    p.ProductName = dr[1].ToString();
+                    p.UnitPrice = Convert.ToInt32(dr["UnitPrice"]);
+                    p.QtyPerUnit = dr[3].ToString();
+                    p.CategoryID = Convert.ToInt32(dr["CategoryID"]);
+                    p.SupplierID = Convert.ToInt32(dr["SupplierID"]);
+                }
+                else
+                {
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return p;
+        }
+        public Products check(int productId)
+        {
+            SqlConnection cn = new SqlConnection("server=DESKTOP-I1NL9J5\\sqlexpress;Integrated Security=true;database=northwind");
+            SqlCommand cmd = new SqlCommand("SELECT * FROM [dbo].[check](@productId)", cn);
+            cmd.Parameters.AddWithValue("productid", productId);
+            cn.Open();
+            Products p = new Products();
+            try
+            {
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.HasRows)
+                {
+                    dr.Read();
+                    p.check = Convert.ToBoolean(dr["productcount"]);
+                }
+                else
+                {
+                    throw new FileNotfound("product not found");
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            cn.Close();
+            return p;
+        }
+        public List<Products> GetProducts()
+        {
+            SqlConnection cn = new SqlConnection("server=DESKTOP-I1NL9J5\\sqlexpress;Integrated Security=true;database=northwind");
+            SqlCommand cmd = new SqlCommand("SELECT * FROM [dbo].[AllProducts]()", cn);
+            cn.Open();
+            SqlDataReader dr = cmd.ExecuteReader();
+            List<Products> prodlist = new List<Products>();
+            try
+            {
+                while (dr.Read())
+                {
+                    Products p = new Products();
+                    p.ProductID = Convert.ToInt32(dr["ProductID"]);
+                    p.ProductName = dr[1].ToString();
+                    p.UnitPrice = Convert.ToInt32(dr["UnitPrice"]);
+                    p.QtyPerUnit = dr[4].ToString();
+                    p.CategoryID = Convert.ToInt32(dr["CategoryID"]);
+                    p.SupplierID = Convert.ToInt32(dr["SupplierID"]);
+                    prodlist.Add(p);
+
+                }
+                
+
+            }
+            catch (Exception)
+            {
+
+                throw  new NullReferenceException("null");
+            }
+            cn.Close();
+            return prodlist;
+        }
+    }
+
+}
+---------------------------------------------------------------
+bal
+-----------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BAL
+{
+    public class Products
+    {
+        private Boolean checkdata;
+
+        public Boolean check
+        {
+            get { return checkdata; }
+            set { checkdata = value; }
+        }
+
+        public int ProductID { get; set; }
+
+        private string _prodname;
+        public string ProductName
+        {
+            get
+            {
+                return _prodname;
+            }
+            set
+            {
+                //_prodname = value;
+                if (value.Length > 40)
+                {
+                    throw new FormatException("lengtht of product name cannot be greater than 40 chars");
+                }
+                else
+                {
+                    _prodname = value;
+                }
+            }
+        }
+        public string QtyPerUnit { get; set; }
+
+        private double _price;
+
+        public double UnitPrice
+        {
+            get { return _price; }
+            set
+            {
+                //_price = value;
+                if (value > 0)
+                {
+                    _price = value;
+                }
+                else
+                {
+                    throw new DivideByZeroException("Price cannot be 0");
+                }
+
+            }
+        }
+
+
+        private int? _catid;
+        public int? CategoryID
+        {
+            get
+            {
+                return _catid;
+            }
+            set
+            {
+
+                if (value != null)
+                {
+                    _catid = value;
+                }
+                else
+                {
+                    throw new NullReferenceException("Category id cannot be null");
+                }
+            }
+
+        }
+        private int? SupID;
+
+        public int? SupplierID
+        {
+            get { return SupID; }
+            set { SupID = value; }
+        }
+
+    }
+}
+
+
