@@ -1,0 +1,5 @@
+C:\Users\Dell\Desktop\mphasis\ADo .net\AdoFirstSqlConnection\BAL\bin\Debug\BAL.dll
+C:\Users\Dell\Desktop\mphasis\ADo .net\AdoFirstSqlConnection\BAL\bin\Debug\BAL.pdb
+C:\Users\Dell\Desktop\mphasis\ADo .net\AdoFirstSqlConnection\BAL\obj\Debug\BAL.csproj.CoreCompileInputs.cache
+C:\Users\Dell\Desktop\mphasis\ADo .net\AdoFirstSqlConnection\BAL\obj\Debug\BAL.dll
+C:\Users\Dell\Desktop\mphasis\ADo .net\AdoFirstSqlConnection\BAL\obj\Debug\BAL.pdb
